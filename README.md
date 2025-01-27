@@ -1,7 +1,6 @@
-Creating a custom git command in Windows
-create a cmd/bat file with the command. E.g. retag.cmd, save it in C:\git-scripts for example
+This repo contains custom git commands for windows.
 
-add your git commands to the file. For example, this set of commands deletes the specified tag from your current branch both locally and remotely, then tags it with the same tag and pushes the change remotely
+Write a custom shell command. Save it to file in C:\git-scripts. The
 
 run this command from your console
 
