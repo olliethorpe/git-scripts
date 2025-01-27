@@ -1,25 +1,32 @@
 #!/bin/bash
-# New branch
 
 if [ -n "$1" ]; then
     branch_name="$1"
 else
     echo "No branch name provided. Exiting."
-    exit
+    exit  # Exits the script if no argument is given.
 fi
 
-git checkout -b "$branch_name"
+# Check if there are unstaged changes
+if git diff --quiet; then
+    echo "No unstaged changes, proceeding to switch to main."
+else
+    echo "Unstaged changes found. Stashing them."
+    git stash
+fi
 
-git push --set-upstream origin "$branch_name"
-
-git stash
-
+# Switch to the main branch, pull latest changes
 git switch main
-
 git pull
 
-git switch "$branch_name"
+# Create the new branch
+git checkout -b "$branch_name"
 
-git merge main
+# Push the new branch and set upstream
+git push --set-upstream origin "$branch_name"
 
-git stash pop
+# If there were any stashed changes, apply them
+if git stash list | grep -q 'stash@{0}'; then
+    echo "Unstashing changes."
+    git stash pop
+fi
