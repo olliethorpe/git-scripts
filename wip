@@ -1,0 +1,25 @@
+#!/bin/bash
+
+# Stage all changes
+git add .
+
+# Get a list of staged files (limit to 3 filenames)
+staged_files=$(git diff --cached --name-only | head -n 3 | xargs -n 1 basename | xargs)
+
+# Check if a custom commit message was provided
+if [ -n "$1" ]; then
+    commit_message="$1"
+else
+    # Set default commit message to "Update [filenames]" if no custom message is provided
+    if [ -n "$staged_files" ]; then
+        commit_message="Update $(echo $staged_files)"
+    else
+        commit_message="Update"
+    fi
+fi
+
+# Commit with the determined message and skip pre-commit hooks
+git commit -m "$commit_message" --no-verify
+
+# Push the changes
+git push

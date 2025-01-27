@@ -1,0 +1,9 @@
+#!/bin/bash
+
+echo "Checking out main..."
+git checkout main
+echo "Pulling..."
+git pull
+echo "Merging..."
+git checkout @{-1}
+git merge origin/main
