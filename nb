@@ -1,10 +1,11 @@
 #!/bin/bash
+# New branch
 
 if [ -n "$1" ]; then
     branch_name="$1"
 else
     echo "No branch name provided. Exiting."
-    exit  # Does this work?
+    exit
 fi
 
 git stash
