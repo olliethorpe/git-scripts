@@ -12,6 +12,7 @@ if git diff --quiet; then
 else
     echo "Unstaged changes found. Stashing them."
     git stash
+    stashed=true
 fi
 
 git switch main
@@ -20,7 +21,7 @@ git pull
 git checkout -b "$branch_name"
 git push --set-upstream origin "$branch_name"
 
-if git stash list | grep -q 'stash@{0}'; then
+if [ "$stashed" = true ]; then
     echo "Unstashing changes."
     git stash pop
 fi
