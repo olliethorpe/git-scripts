@@ -6,7 +6,7 @@ else
     echo "No branch name provided. Exiting."
     exit
 fi
-
+stashed=false
 if git diff --quiet; then
     echo "No unstaged changes, proceeding to switch to main."
 else
@@ -16,10 +16,17 @@ else
 fi
 
 git switch main
-git pull
+git pull --ff-only
 
-git checkout -b "$branch_name"
-git push --set-upstream origin "$branch_name"
+# Create or switch to the new branch
+if git rev-parse --verify "$branch_name" >/dev/null 2>&1; then
+    echo "Branch already exists, switching to $branch_name."
+    git switch "$branch_name"
+else
+    echo "Creating and switching to new branch $branch_name."
+    git checkout -b "$branch_name"
+    git push --set-upstream origin "$branch_name"
+fi
 
 if [ "$stashed" = true ]; then
     echo "Unstashing changes."
